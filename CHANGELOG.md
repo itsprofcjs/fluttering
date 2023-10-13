@@ -1,3 +1,10 @@
+# [1.0.0-beta.4](https://github.com/itsprofcjs/fluttering/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2023-10-13)
+
+
+### Features
+
+* rolling the dice ([4019e26](https://github.com/itsprofcjs/fluttering/commit/4019e2614e97924bf130aaa5353afc12df1f2aa2))
+
 # [1.0.0-beta.3](https://github.com/itsprofcjs/fluttering/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2023-10-07)
 
 
