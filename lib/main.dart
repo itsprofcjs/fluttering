@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -22,8 +24,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class DicePage extends StatelessWidget {
+class DicePage extends StatefulWidget {
   const DicePage({super.key});
+
+  @override
+  State<DicePage> createState() => _DicePageState();
+}
+
+class _DicePageState extends State<DicePage> {
+  int leftDiceNumber = 1;
+  int rightDiceNumber = 5;
+
+  void changeDiceFace() {
+    setState(() {
+      leftDiceNumber = Random().nextInt(6) + 1;
+      rightDiceNumber = Random().nextInt(6) + 1;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,23 +49,19 @@ class DicePage extends StatelessWidget {
         children: <Widget>[
           Expanded(
             child: TextButton(
-              onPressed: () {
-                print('Left dice rolled');
-              },
+              onPressed: changeDiceFace,
               child: Padding(
                 padding: EdgeInsets.all(32.0),
-                child: Image.asset('images/dice1.png'),
+                child: Image.asset('images/dice$leftDiceNumber.png'),
               ),
             ),
           ),
           Expanded(
             child: TextButton(
-              onPressed: () {
-                print('Right dice rolled');
-              },
+              onPressed: changeDiceFace,
               child: Padding(
                 padding: EdgeInsets.all(32.0),
-                child: Image.asset('images/dice2.png'),
+                child: Image.asset('images/dice$rightDiceNumber.png'),
               ),
             ),
           )
