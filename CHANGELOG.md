@@ -1,3 +1,10 @@
+# [1.0.0-beta.5](https://github.com/itsprofcjs/fluttering/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-10-17)
+
+
+### Features
+
+* rolling the balls ([9d25fc8](https://github.com/itsprofcjs/fluttering/commit/9d25fc83622fe98fdc17583f0596d4eeb8557a38))
+
 # [1.0.0-beta.4](https://github.com/itsprofcjs/fluttering/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2023-10-13)
 
 
