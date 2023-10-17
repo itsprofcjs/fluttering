@@ -14,68 +14,40 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.blue,
         appBar: AppBar(
-          title: Text('Dicing...'),
+          title: const Text('Ask Me Anything'),
+          backgroundColor: Colors.blue.shade900,
         ),
-        body: SafeArea(child: DicePage()),
+        body: Ball(),
       ),
     );
   }
 }
 
-class DicePage extends StatefulWidget {
-  const DicePage({super.key});
+class Ball extends StatefulWidget {
+  const Ball({super.key});
 
   @override
-  State<DicePage> createState() => _DicePageState();
+  State<Ball> createState() => _BallState();
 }
 
-class _DicePageState extends State<DicePage> {
-  int leftDiceNumber = 1;
-  int rightDiceNumber = 5;
+class _BallState extends State<Ball> {
+  int ballNo = 1;
 
-  void changeDiceFace() {
+  void onPressed() {
     setState(() {
-      leftDiceNumber = Random().nextInt(6) + 1;
-      rightDiceNumber = Random().nextInt(6) + 1;
+      ballNo = Random().nextInt(5) + 1;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: TextButton(
-              onPressed: changeDiceFace,
-              child: Padding(
-                padding: EdgeInsets.all(32.0),
-                child: Image.asset('images/dice$leftDiceNumber.png'),
-              ),
-            ),
-          ),
-          Expanded(
-            child: TextButton(
-              onPressed: changeDiceFace,
-              child: Padding(
-                padding: EdgeInsets.all(32.0),
-                child: Image.asset('images/dice$rightDiceNumber.png'),
-              ),
-            ),
-          )
-        ],
+      child: TextButton(
+        onPressed: onPressed,
+        child: Image.asset('images/ball$ballNo.png'),
       ),
     );
-  }
-}
-
-class BackgroundContainer extends StatelessWidget {
-  const BackgroundContainer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
