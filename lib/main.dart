@@ -1,11 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:audioplayers/audioplayers.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -14,40 +12,58 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.blue,
-        appBar: AppBar(
-          title: const Text('Ask Me Anything'),
-          backgroundColor: Colors.blue.shade900,
+        body: SafeArea(
+          child: SoundApp(),
         ),
-        body: Ball(),
       ),
     );
   }
 }
 
-class Ball extends StatefulWidget {
-  const Ball({super.key});
+class SoundApp extends StatefulWidget {
+  const SoundApp({super.key});
 
   @override
-  State<Ball> createState() => _BallState();
+  State<SoundApp> createState() => _SoundAppState();
 }
 
-class _BallState extends State<Ball> {
-  int ballNo = 1;
+class _SoundAppState extends State<SoundApp> {
+  void onPlayClick(int soundNo) {
+    final player = AudioPlayer();
 
-  void onPressed() {
-    setState(() {
-      ballNo = Random().nextInt(5) + 1;
-    });
+    player.play(AssetSource('note$soundNo.wav'));
+  }
+
+  Expanded buildKey({required MaterialColor color, required int soundNo}) {
+    return Expanded(
+      child: TextButton(
+        onPressed: () {
+          onPlayClick(soundNo);
+        },
+        child: Text(
+          'Click me!',
+        ),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(color),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: TextButton(
-        onPressed: onPressed,
-        child: Image.asset('images/ball$ballNo.png'),
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        buildKey(color: Colors.red, soundNo: 1),
+        buildKey(color: Colors.yellow, soundNo: 2),
+        buildKey(color: Colors.grey, soundNo: 3),
+        buildKey(color: Colors.blue, soundNo: 4),
+        buildKey(color: Colors.green, soundNo: 5),
+        buildKey(color: Colors.brown, soundNo: 6),
+        buildKey(color: Colors.cyan, soundNo: 7)
+      ],
     );
   }
 }
