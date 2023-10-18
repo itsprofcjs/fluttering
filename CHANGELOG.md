@@ -1,3 +1,10 @@
+# [1.0.0-beta.6](https://github.com/itsprofcjs/fluttering/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-10-18)
+
+
+### Features
+
+* sound club ([b3d1dc3](https://github.com/itsprofcjs/fluttering/commit/b3d1dc387a4215bd046581f04001fcb58affc762))
+
 # [1.0.0-beta.5](https://github.com/itsprofcjs/fluttering/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-10-17)
 
 
