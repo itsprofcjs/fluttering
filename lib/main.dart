@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:fluttering_app/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 void main() => runApp(const MyApp());
 
@@ -10,59 +9,142 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
-        body: SafeArea(
-          child: SoundApp(),
-        ),
+        backgroundColor: Colors.black,
+        body: SafeArea(child: QuizApp()),
       ),
     );
   }
 }
 
-class SoundApp extends StatefulWidget {
-  const SoundApp({super.key});
+class QuizApp extends StatefulWidget {
+  const QuizApp({super.key});
 
   @override
-  State<SoundApp> createState() => _SoundAppState();
+  State createState() => _QuizAppState();
 }
 
-class _SoundAppState extends State<SoundApp> {
-  void onPlayClick(int soundNo) {
-    final player = AudioPlayer();
+class _QuizAppState extends State<QuizApp> {
+  QuizBrain quizBrain = QuizBrain();
 
-    player.play(AssetSource('note$soundNo.wav'));
-  }
+  List<Icon> scoreKeeper = [];
 
-  Expanded buildKey({required MaterialColor color, required int soundNo}) {
+  int currentQuestion = 0;
+  bool showAlert = false;
+
+  Expanded renderQuestion() {
     return Expanded(
-      child: TextButton(
-        onPressed: () {
-          onPlayClick(soundNo);
-        },
+      flex: 12,
+      child: Center(
         child: Text(
-          'Click me!',
-        ),
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(color),
+          quizBrain.getCurrentQuestion(),
+          style: const TextStyle(
+              color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
         ),
       ),
     );
+  }
+
+  TextButton renderButton(String text, Function() onPressed,
+      MaterialStateProperty<Color?>? backgroundColor) {
+    return TextButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+          foregroundColor: const MaterialStatePropertyAll(Colors.white),
+          backgroundColor: backgroundColor),
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Text(text),
+      ),
+    );
+  }
+
+  void addIcon(bool isYes) {
+    Icon yesIcon = const Icon(
+      Icons.check,
+      color: Colors.green,
+    );
+
+    Icon noIcon = const Icon(
+      Icons.close,
+      color: Colors.red,
+    );
+
+    Icon iconToAdd;
+
+    if (isYes) {
+      iconToAdd = yesIcon;
+    } else {
+      iconToAdd = noIcon;
+    }
+
+    setState(() => scoreKeeper.add(iconToAdd));
+  }
+
+  List<Icon> renderList() => scoreKeeper.isNotEmpty
+      ? scoreKeeper
+      : const [
+          Icon(
+            Icons.help,
+            color: Colors.transparent,
+          ),
+        ];
+
+  void onClick(BuildContext context, bool givenAnswer) {
+    bool correctAnswer = quizBrain.getCurrentAnswer();
+
+    if (givenAnswer == correctAnswer) {
+      addIcon(true);
+    } else {
+      addIcon(false);
+    }
+
+    setState(() {
+      if (!quizBrain.getNextQuestion()) {
+        scoreKeeper = [];
+
+        Alert(
+            context: context,
+            title: "Restart!!!",
+            desc: "Questions are over, will re-start",
+            buttons: [
+              DialogButton(
+                onPressed: () => Navigator.pop(context),
+                gradient: const LinearGradient(colors: [
+                  Color.fromRGBO(116, 116, 191, 1.0),
+                  Color.fromRGBO(52, 138, 199, 1.0),
+                ]),
+                child: const Text(
+                  "Okay",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+              )
+            ]).show();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        buildKey(color: Colors.red, soundNo: 1),
-        buildKey(color: Colors.yellow, soundNo: 2),
-        buildKey(color: Colors.grey, soundNo: 3),
-        buildKey(color: Colors.blue, soundNo: 4),
-        buildKey(color: Colors.green, soundNo: 5),
-        buildKey(color: Colors.brown, soundNo: 6),
-        buildKey(color: Colors.cyan, soundNo: 7)
+      children: [
+        renderQuestion(),
+        renderButton('True', () => onClick(context, true),
+            const MaterialStatePropertyAll(Colors.green)),
+        const Spacer(
+          flex: 1,
+        ),
+        renderButton('False', () => onClick(context, false),
+            const MaterialStatePropertyAll(Colors.red)),
+        const Spacer(
+          flex: 1,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: renderList(),
+        ),
       ],
     );
   }
