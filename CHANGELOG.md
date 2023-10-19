@@ -1,3 +1,10 @@
+# [1.0.0-beta.7](https://github.com/itsprofcjs/fluttering/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2023-10-19)
+
+
+### Features
+
+* questionaire ([09d3009](https://github.com/itsprofcjs/fluttering/commit/09d30090db4ee1032761568b4420235df919af5f))
+
 # [1.0.0-beta.6](https://github.com/itsprofcjs/fluttering/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-10-18)
 
 
