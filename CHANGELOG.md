@@ -1,3 +1,10 @@
+# [1.0.0-beta.8](https://github.com/itsprofcjs/fluttering/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2023-10-20)
+
+
+### Features
+
+* destini ([aecf4f7](https://github.com/itsprofcjs/fluttering/commit/aecf4f72422a57ea7ef699817b2d3c4de798fb3b))
+
 # [1.0.0-beta.7](https://github.com/itsprofcjs/fluttering/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2023-10-19)
 
 
