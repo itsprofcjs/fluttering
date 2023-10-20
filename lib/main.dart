@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_app/quiz_brain.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:fluttering_app/story_brain.dart';
 
 void main() => runApp(const MyApp());
 
@@ -11,141 +10,81 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       home: Scaffold(
-        backgroundColor: Colors.black,
-        body: SafeArea(child: QuizApp()),
+        body: DestiniApp(),
       ),
     );
   }
 }
 
-class QuizApp extends StatefulWidget {
-  const QuizApp({super.key});
+class DestiniApp extends StatefulWidget {
+  const DestiniApp({super.key});
 
   @override
-  State createState() => _QuizAppState();
+  State createState() => DestiniAppState();
 }
 
-class _QuizAppState extends State<QuizApp> {
-  QuizBrain quizBrain = QuizBrain();
-
-  List<Icon> scoreKeeper = [];
-
-  int currentQuestion = 0;
-  bool showAlert = false;
-
-  Expanded renderQuestion() {
-    return Expanded(
-      flex: 12,
-      child: Center(
-        child: Text(
-          quizBrain.getCurrentQuestion(),
-          style: const TextStyle(
-              color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-
-  TextButton renderButton(String text, Function() onPressed,
-      MaterialStateProperty<Color?>? backgroundColor) {
-    return TextButton(
-      onPressed: onPressed,
-      style: ButtonStyle(
-          foregroundColor: const MaterialStatePropertyAll(Colors.white),
-          backgroundColor: backgroundColor),
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Text(text),
-      ),
-    );
-  }
-
-  void addIcon(bool isYes) {
-    Icon yesIcon = const Icon(
-      Icons.check,
-      color: Colors.green,
-    );
-
-    Icon noIcon = const Icon(
-      Icons.close,
-      color: Colors.red,
-    );
-
-    Icon iconToAdd;
-
-    if (isYes) {
-      iconToAdd = yesIcon;
-    } else {
-      iconToAdd = noIcon;
-    }
-
-    setState(() => scoreKeeper.add(iconToAdd));
-  }
-
-  List<Icon> renderList() => scoreKeeper.isNotEmpty
-      ? scoreKeeper
-      : const [
-          Icon(
-            Icons.help,
-            color: Colors.transparent,
-          ),
-        ];
-
-  void onClick(BuildContext context, bool givenAnswer) {
-    bool correctAnswer = quizBrain.getCurrentAnswer();
-
-    if (givenAnswer == correctAnswer) {
-      addIcon(true);
-    } else {
-      addIcon(false);
-    }
-
-    setState(() {
-      if (!quizBrain.getNextQuestion()) {
-        scoreKeeper = [];
-
-        Alert(
-            context: context,
-            title: "Restart!!!",
-            desc: "Questions are over, will re-start",
-            buttons: [
-              DialogButton(
-                onPressed: () => Navigator.pop(context),
-                gradient: const LinearGradient(colors: [
-                  Color.fromRGBO(116, 116, 191, 1.0),
-                  Color.fromRGBO(52, 138, 199, 1.0),
-                ]),
-                child: const Text(
-                  "Okay",
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-              )
-            ]).show();
-      }
-    });
-  }
+class DestiniAppState extends State<DestiniApp> {
+  StoryBrain storyBrain = StoryBrain();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        renderQuestion(),
-        renderButton('True', () => onClick(context, true),
-            const MaterialStatePropertyAll(Colors.green)),
-        const Spacer(
-          flex: 1,
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('images/space.webp'), fit: BoxFit.cover),
+      ),
+      padding: const EdgeInsets.all(50),
+      constraints: const BoxConstraints.expand(),
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 12,
+              child: Center(
+                child: Text(
+                  storyBrain.getStory(),
+                  style: const TextStyle(fontSize: 32, color: Colors.white),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    storyBrain.nextStory(1);
+                  });
+                },
+                child: Text(
+                  storyBrain.getChoice1(),
+                  style: const TextStyle(color: Colors.red, fontSize: 24),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              flex: 2,
+              child: Visibility(
+                visible: storyBrain.buttonShouldBeVisible(),
+                child: TextButton(
+                  onPressed: () {
+                    setState(() {
+                      storyBrain.nextStory(2);
+                    });
+                  },
+                  child: Text(
+                    storyBrain.getChoice2(),
+                    style: const TextStyle(color: Colors.yellow, fontSize: 24),
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
-        renderButton('False', () => onClick(context, false),
-            const MaterialStatePropertyAll(Colors.red)),
-        const Spacer(
-          flex: 1,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: renderList(),
-        ),
-      ],
+      ),
     );
   }
 }
